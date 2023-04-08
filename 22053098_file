@@ -1,0 +1,58 @@
+
+
+pipeline {
+      agent any
+      stages {
+      
+          stage('Stage_1') {
+            steps {
+              echo "22053098_STG1: Push change to production web server?"
+              input()
+            }
+          }
+          
+          stage('Stage_2') {
+            steps {
+               sh '''#!/bin/bash
+                 puppet resource file /tmp/22053098/clone ensure=absent force=true;
+                 puppet resource file /tmp/22053098/clone ensure=directory;
+                 cd /tmp/22053098/clone;
+                 git clone https://github.com/VincentSey/22053098_repo.git;
+                 targets=22053098-websvr;
+                 locate_script='/tmp/22053098/clone/22053098_repo/22053098_script';
+                 bolt script run $locate_script -t $targets --no-host-key-check --run-as root;
+                 '''
+                 echo "22053098_STG2 - Push to production web server completed"
+            }
+          }
+          
+          stage('Stage_3') {
+            steps {
+                    echo "22053098_STG3: Proceed to test production web service?"
+                    input()
+            }
+          }
+          
+          stage('Stage_4') {
+            steps {
+              sh '''#!/bin/bash
+              curl –Is http://22053098-websvr.localdomain |head –n 1  > /tmp/web-test-result
+              '''
+              echo "22053098_STG4: Production web server testing completed'
+            }
+          }
+          
+          stage('Stage_5') {
+            steps {
+                   echo "22053098_STG5: Web server testing result has been inspected"
+                   input()
+            }
+          }
+          
+          stage('Stage_6') {
+            steps {
+              echo "22053098_STG6: Production operation is successful."
+            }
+          }
+      }
+}
