@@ -29,7 +29,8 @@ pipeline {
           stage('Stage_3') {
             steps {
                     echo "22053098_STG3: Proceed to test production web service?"
-                    input()
+                    
+                    Proceed or Abort?
             }
           }
           
@@ -38,14 +39,15 @@ pipeline {
               sh '''#!/bin/bash
               curl –Is http://22053098-websvr.localdomain |head –n 1  > /tmp/web-test-result
               '''
-              echo "22053098_STG4: Production web server testing completed'
+              echo "22053098_STG4: Production web server testing completed"
             }
           }
           
           stage('Stage_5') {
             steps {
                    echo "22053098_STG5: Web server testing result has been inspected"
-                   input()
+                   
+                   Proceed or Abort?
             }
           }
           
