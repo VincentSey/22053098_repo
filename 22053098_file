@@ -28,8 +28,7 @@ pipeline {
           
           stage('Stage_3') {
             steps {
-                    echo "22053098_STG3: Proceed to test production web service?"
-                    
+                    echo "22053098_STG3: Proceed to test production web service?
                     Proceed or Abort?
             }
           }
