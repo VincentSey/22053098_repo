@@ -30,7 +30,7 @@ pipeline {
             steps {
                     echo "22053098_STG3: Proceed to test production web service?
                     input()
-                    Proceed or Abort?
+                    "Proceed or Abort"
             }
           }
           
