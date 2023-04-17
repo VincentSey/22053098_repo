@@ -30,7 +30,7 @@ pipeline {
             steps {
                     echo "22053098_STG3: Proceed to test production web service?
                     input()
-                    "Proceed or Abort"
+                    
             }
           }
           
@@ -45,9 +45,8 @@ pipeline {
           
           stage('Stage_5') {
             steps {
-                   echo "22053098_STG5: Web server testing result has been inspected"
-                   
-                   Proceed or Abort?
+                   echo "22053098_STG5: Web server testing result has been inspecte
+                   input()
             }
           }
           
