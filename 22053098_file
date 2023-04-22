@@ -1,59 +1,74 @@
-
-
 pipeline {
-      agent any
-      stages {
-      
-          stage('Stage_1') {
-            steps {
-              echo "22053098_STG1: Push change to production web server?"
-              input()
+
+    agent {
+        node {
+            label 'master'
+        }
+    }
+    options {
+        buildDiscarder logRotator( 
+                    daysToKeepStr: '15', 
+                    numToKeepStr: '10'
+            )
+    }
+    stages {
+		
+		stage("22053098 STG1") {
+            input {
+                message "22053098 STG1:Push change to production web server?"
+                ok "Proceed"
             }
-          }
-          
-          stage('Stage_2') {
             steps {
-               sh '''#!/bin/bash
-                 puppet resource file /tmp/22053098/clone ensure=absent force=true;
-                 puppet resource file /tmp/22053098/clone ensure=directory;
-                 cd /tmp/22053098/clone;
-                 git clone https://github.com/VincentSey/22053098_repo.git;
-                 targets=22053098-websvr;
-                 locate_script='/tmp/22053098/clone/22053098_repo/22053098_script';
-                 bolt script run $locate_script -t $targets -u clientadm -p user123 --no-host-key-check --run-as root;
-                 '''
-                 echo "22053098_STG2 - Push to production web server completed"
+                echo "Proceeding"
             }
-          }
-          
-          stage('Stage_3') {
+        }
+        
+        stage('22053098 STG2') {
             steps {
-                    echo "22053098_STG3: Proceed to test production web service?
-                    input()
-                    
+				sh ''' 
+				bolt script run $WORKSPACE/22053098_script -t 22053098-websvr.localdomain -u clientadm -p pass123 --no-host-key-check --run-as root
+				echo "22053098 STG2 - Push to production web server completed"
+				'''
             }
-          }
-          
-          stage('Stage_4') {
+        }
+		
+		stage("22053098 STG3") {
+            input {
+                message "22053098 STG3:Proceed to test production web server?"
+                ok "Proceed"
+            }
             steps {
-              sh '''#!/bin/bash
-              curl –Is http://22053098-websvr.localdomain |head –n 1  > /tmp/web-test-result
-              '''
-              echo "22053098_STG4: Production web server testing completed"
+                echo "Proceeding"
             }
-          }
-          
-          stage('Stage_5') {
+        }
+		
+		stage('22053098 STG4') {
             steps {
-                   echo "22053098_STG5: Web server testing result has been inspecte
-                   input()
+				sh ''' 
+				curl -Is http://22053098-websvr.localdomain | head -n 1 > /tmp/web-test-result
+				cat /tmp/web-test-result
+				echo "STG4: Production wev server testing completed"
+				'''
             }
-          }
-          
-          stage('Stage_6') {
+        }
+		
+		stage("22053098 STG5") {
+            input {
+                message "22053098 STG5: Web server testing result has been inspected"
+                ok "Proceed"
+            }
             steps {
-              echo "22053098_STG6: Production operation is successful."
+                echo "Proceeding"
             }
-          }
-      }
+        }
+		
+		stage('22053098 STG6') {
+            steps {
+				sh ''' 
+				echo "STG6:Production Operation is successful"
+				'''
+            }
+        }
+		
+    }
 }
