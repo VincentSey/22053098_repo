@@ -22,8 +22,8 @@ pipeline {
                 echo "Proceeding"
             }
         }
-
-    stage('22053098 STG2') {
+        
+        stage('22053098 STG2') {
             steps {
 				sh ''' 
 				bolt script run $WORKSPACE/22053098_script -t 22053098-websvr.localdomain -u clientadm -p pass123 --no-host-key-check --run-as root
@@ -31,41 +31,44 @@ pipeline {
 				'''
             }
         }
-
-  stage("22053098 STG3") {
-                 input {
-                     message "22053098 STG3:Proceed to test production web server?"
-                     ok "Proceed"
+		
+		stage("22053098 STG3") {
+            input {
+                message "22053098 STG3:Proceed to test production web server?"
+                ok "Proceed"
             }
             steps {
                 echo "Proceeding"
             }
         }
-
- stage('22053098 STG4') {
-                steps {
-		   sh ''' 
-		    curl -Is http://22053098-websvr.localdomain | head -n 1 > /tmp/web-test-result
-		    cat /tmp/web-test-result
-		    echo "STG4: Production wev server testing completed"
-		     '''
+		
+		stage('22053098 STG4') {
+            steps {
+				sh ''' 
+				curl -Is http://22053098-websvr.localdomain | head -n 1 > /tmp/web-test-result
+				cat /tmp/web-test-result
+				echo "STG4: Production wev server testing completed"
+				'''
             }
         }
-
- stage('Stage_5') {
-            steps {
-                   echo "22053098_STG5: Web server testing result has been inspected
-                   ok "Proceed"
+		
+		stage("22053098 STG5") {
+            input {
+                message "22053098 STG5: Web server testing result has been inspected"
+                ok "Proceed"
             }
             steps {
                 echo "Proceeding"
             }
         }
-          
-          stage('Stage_6') {
+		
+		stage('22053098 STG6') {
             steps {
-              echo "22053098_STG6: Production operation is successful."
+				sh ''' 
+				echo "STG6:Production Operation is successful"
+				'''
             }
-          }
-      }
+        }
+		
+    }
 }
