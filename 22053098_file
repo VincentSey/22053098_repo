@@ -13,7 +13,7 @@ pipeline {
     }
     stages {
 		
-		stage("22053098 STG1") {
+		stage("22053098_STG1") {
             input {
                 message "22053098 STG1:Push change to production web server?"
                 ok "Proceed"
@@ -23,7 +23,7 @@ pipeline {
             }
         }
         
-        stage('22053098 STG2') {
+        stage('22053098_STG2') {
             steps {
 				sh ''' 
 				bolt script run $WORKSPACE/22053098_script -t 22053098-websvr.localdomain -u clientadm -p pass123 --no-host-key-check --run-as root
@@ -32,7 +32,7 @@ pipeline {
             }
         }
 		
-		stage("22053098 STG3") {
+		stage("22053098_STG3") {
             input {
                 message "22053098 STG3:Proceed to test production web server?"
                 ok "Proceed"
@@ -42,7 +42,7 @@ pipeline {
             }
         }
 		
-		stage('22053098 STG4') {
+		stage('22053098_STG4') {
             steps {
 				sh ''' 
 				curl -Is http://22053098-websvr.localdomain | head -n 1 > /tmp/web-test-result
@@ -52,7 +52,7 @@ pipeline {
             }
         }
 		
-		stage("22053098 STG5") {
+		stage("22053098_STG5") {
             input {
                 message "22053098 STG5: Web server testing result has been inspected"
                 ok "Proceed"
@@ -62,7 +62,7 @@ pipeline {
             }
         }
 		
-		stage('22053098 STG6') {
+		stage('22053098_STG6') {
             steps {
 				sh ''' 
 				echo "STG6:Production Operation is successful"
