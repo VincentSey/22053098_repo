@@ -27,8 +27,8 @@ pipeline {
             steps {
                sh '''#!/bin/bash
                  puppet resource file /tmp/22053098/clone ensure=absent force=true;
-                 puppet resource file /tmp/22053098/clone ensure=directory;
 		 puppet resource file /tmp/22053098 ensure=directory
+                 puppet resource file /tmp/22053098/clone ensure=directory
                  cd /tmp/22053098/clone;
                  git clone https://github.com/VincentSey/22053098_repo.git;
                  targets=22053098-websvr;
