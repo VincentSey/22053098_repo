@@ -23,15 +23,21 @@ pipeline {
             }
         }
         
-        stage('22053098_STG2') {
+        stage('Stage_2') {
             steps {
-				sh ''' 
-				bolt script run $WORKSPACE/22053098_script -t 22053098-websvr.localdomain -u clientadm -p pass123 --no-host-key-check --run-as root
-				echo "22053098 STG2 - Push to production web server completed"
-				'''
+               sh '''#!/bin/bash
+                 puppet resource file /tmp/22053098/clone ensure=absent force=true;
+                 puppet resource file /tmp/22053098/clone ensure=directory;
+		 puppet resource file /tmp/22053098 ensure=directory
+                 cd /tmp/22053098/clone;
+                 git clone https://github.com/VincentSey/22053098_repo.git;
+                 targets=22053098-websvr;
+                 locate_script='/tmp/22053098/clone/22053098_repo/22053098_script';
+                 bolt script run $locate_script -t $targets -u clientadm -p user123 --no-host-key-check --run-as root;
+                 '''
+                 echo "22053098_STG2 - Push to production web server completed"
             }
-        }
-		
+          }
 		stage("22053098_STG3") {
             input {
                 message "22053098 STG3:Proceed to test production web server?"
